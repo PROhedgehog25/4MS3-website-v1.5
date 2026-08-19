@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1786531043678-announcement",
+        "title": "ENTREE SCHOLAR DELAYED",
+        "message": "the ministre of school just delyed the school entree to septembre 21st 2026 and i hate it",
+        "type": "event",
+        "createdAt": "2026-08-12T10:37:23.678Z"
+    },
+    {
+        "id": "1786720175931",
+        "title": "Student of the Week",
+        "message": "ABDALLAH BENKHIAT has been selected as Student of the Week!",
+        "type": "info",
+        "createdAt": "2026-08-14T15:09:35.931Z"
+    },
+    {
+        "id": "1786720282079-announcement",
+        "title": "SCHOOL ENTREE DELAYED",
+        "message": "the ministre of school just delyed the school entree to septembre 21st 2026 and i hate it",
+        "type": "event",
+        "createdAt": "2026-08-14T15:11:22.079Z"
+    }
+]

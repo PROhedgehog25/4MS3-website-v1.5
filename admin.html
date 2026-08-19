@@ -1,0 +1,8819 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>4MS3 Admin controle</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 20% 10%,
+                    rgba(0, 150, 255, .12),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 80% 90%,
+                    rgba(255, 30, 160, .10),
+                    transparent 35%
+                ),
+                #03040d;
+
+            color: #fff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+
+        /* ==============================
+           HEADER
+        ============================== */
+
+        header {
+            padding: 35px 6% 25px;
+
+            border-bottom:
+                1px solid
+                rgba(100, 170, 255, .15);
+
+            background:
+                rgba(3, 5, 16, .8);
+
+            backdrop-filter: blur(15px);
+        }
+
+
+        .top-line {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+
+        .logo {
+            width: 100px;
+
+            display: block;
+        }
+
+
+        .logo img {
+            width: 100%;
+
+            display: block;
+        }
+
+
+        .admin-label {
+            color: #63cfff;
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            letter-spacing: 3px;
+
+            text-align: right;
+        }
+
+
+        h1 {
+            margin: 35px 0 8px;
+
+            font-size: clamp(30px, 6vw, 65px);
+
+            line-height: .95;
+
+            letter-spacing: -3px;
+        }
+
+
+        h1 span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #1baeff,
+                    #8245ff,
+                    #ff2998
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        .subtitle {
+            color: #7885a5;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ==============================
+           CONTENT
+        ============================== */
+
+        main {
+            width: min(1250px, 88%);
+
+            margin: 0 auto;
+
+            padding: 45px 0 80px;
+        }
+
+
+        .toolbar {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .pending-count {
+            color: #8794b2;
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            letter-spacing: 2px;
+        }
+
+
+        .refresh-button {
+            padding: 10px 16px;
+
+            border:
+                1px solid
+                rgba(70, 170, 255, .3);
+
+            border-radius: 8px;
+
+            background:
+                rgba(10, 25, 55, .7);
+
+            color: #b9d9ff;
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            letter-spacing: 1px;
+
+            cursor: pointer;
+        }
+
+
+        .refresh-button:hover {
+            border-color: #38baff;
+
+            color: white;
+        }
+
+
+        /* ==============================
+           PHOTO GRID
+        ============================== */
+
+        .pending-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(280px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+
+        .photo-card {
+            overflow: hidden;
+
+            border:
+                1px solid
+                rgba(90, 150, 255, .16);
+
+            border-radius: 15px;
+
+            background:
+                rgba(8, 12, 30, .85);
+
+            box-shadow:
+                0 15px 50px
+                rgba(0, 0, 0, .25);
+        }
+
+
+        .photo-image {
+            width: 100%;
+
+            height: 250px;
+
+            display: block;
+
+            object-fit: cover;
+
+            background: #02030a;
+        }
+
+
+        .photo-info {
+            padding: 17px;
+        }
+
+
+        .photo-filename {
+            overflow: hidden;
+
+            margin-bottom: 7px;
+
+            color: #fff;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+
+            text-overflow: ellipsis;
+        }
+
+
+        .photo-submitter {
+            color: #687692;
+
+            font-size: 9px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .photo-actions {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 8px;
+
+            margin-top: 15px;
+        }
+
+
+        .approve-button,
+        .reject-button {
+            padding: 12px;
+
+            border-radius: 8px;
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            letter-spacing: 1px;
+
+            cursor: pointer;
+        }
+
+
+        .approve-button {
+            border:
+                1px solid
+                rgba(30, 220, 150, .35);
+
+            background:
+                rgba(10, 100, 75, .25);
+
+            color: #54e7b0;
+        }
+
+
+        .approve-button:hover {
+            background:
+                rgba(20, 160, 110, .35);
+
+            border-color: #38e9ad;
+        }
+
+
+        .reject-button {
+            border:
+                1px solid
+                rgba(255, 60, 120, .3);
+
+            background:
+                rgba(120, 20, 55, .2);
+
+            color: #ff6e9f;
+        }
+
+
+        .reject-button:hover {
+            background:
+                rgba(170, 20, 70, .35);
+
+            border-color: #ff4d8c;
+        }
+
+
+        button:disabled {
+            opacity: .4;
+
+            cursor: not-allowed;
+        }
+
+
+        /* ==============================
+           EMPTY
+        ============================== */
+
+        .empty-state {
+            padding: 80px 20px;
+
+            text-align: center;
+
+            border:
+                1px dashed
+                rgba(100, 160, 255, .15);
+
+            border-radius: 15px;
+
+            color: #5f6c88;
+        }
+
+
+        .empty-icon {
+            margin-bottom: 15px;
+
+            font-size: 40px;
+        }
+
+
+        .empty-title {
+            margin-bottom: 8px;
+
+            color: #a9b5cf;
+
+            font-size: 13px;
+
+            font-weight: 900;
+
+            letter-spacing: 2px;
+        }
+
+
+        .empty-text {
+            font-size: 10px;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* ==============================
+           STATUS
+        ============================== */
+
+        .status {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            z-index: 100;
+
+            max-width: 320px;
+
+            padding: 13px 18px;
+
+            border:
+                1px solid
+                rgba(70, 170, 255, .25);
+
+            border-radius: 9px;
+
+            background:
+                rgba(5, 8, 22, .95);
+
+            color: #9fb1d5;
+
+            font-size: 10px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, .4);
+
+            opacity: 0;
+
+            transform:
+                translateY(10px);
+
+            pointer-events: none;
+
+            transition:
+                opacity .25s ease,
+                transform .25s ease;
+        }
+
+
+        .status.show {
+            opacity: 1;
+
+            transform:
+                translateY(0);
+        }
+
+
+        .status.success {
+            border-color:
+                rgba(40, 220, 150, .4);
+
+            color: #61e8b5;
+        }
+
+
+        .status.error {
+            border-color:
+                rgba(255, 50, 100, .4);
+
+            color: #ff789f;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .top-line {
+                align-items: flex-start;
+            }
+
+            .admin-label {
+                font-size: 7px;
+            }
+
+            .pending-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .photo-image {
+                height: 220px;
+            }
+
+        }
+        /* ================================
+   ASSET PREVIEW FIX
+================================ */
+
+.asset-admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px;
+    margin-top: 25px;
+}
+
+.asset-admin-card {
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(100, 130, 255, 0.25);
+    background: rgba(5, 7, 20, 0.85);
+}
+
+.asset-admin-card img {
+    width: 100%;
+    height: 220px;
+
+    /* THIS prevents huge images */
+    object-fit: contain;
+
+    display: block;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(70, 30, 130, 0.25),
+            rgba(3, 5, 15, 0.95)
+        );
+
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.asset-admin-card .asset-info {
+    padding: 15px;
+}
+
+.asset-admin-card .asset-name {
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+    word-break: break-word;
+}
+
+.asset-admin-card .asset-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.asset-admin-card button,
+.asset-admin-card a {
+    flex: 1;
+    padding: 9px 12px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* =========================================
+   ASSET MANAGER — MATCH EXISTING BUTTONS
+========================================= */
+
+.asset-upload-button,
+.refresh-button,
+.asset-admin-card button,
+.asset-admin-card a {
+    appearance: none;
+    border: 1px solid rgba(70, 150, 255, 0.45);
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(15, 30, 70, 0.95),
+            rgba(40, 10, 60, 0.95)
+        );
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+
+    cursor: pointer;
+    text-decoration: none;
+
+    box-shadow:
+        0 0 10px rgba(30, 110, 255, 0.15),
+        inset 0 0 12px rgba(80, 40, 255, 0.08);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* UPLOAD ASSET */
+
+.asset-upload-button {
+    padding: 12px 22px;
+    margin-top: 15px;
+}
+
+
+/* REFRESH */
+
+.refresh-button {
+    padding: 9px 16px;
+}
+
+
+/* VIEW + DELETE */
+
+.asset-admin-card button,
+.asset-admin-card a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 38px;
+    padding: 8px 13px;
+
+    font-size: 11px;
+}
+
+
+/* HOVER */
+
+.asset-upload-button:hover,
+.refresh-button:hover,
+.asset-admin-card button:hover,
+.asset-admin-card a:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(255, 40, 190, 0.8);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(20, 55, 110, 1),
+            rgba(75, 15, 90, 1)
+        );
+
+    box-shadow:
+        0 0 12px rgba(30, 120, 255, 0.35),
+        0 0 25px rgba(230, 30, 190, 0.18);
+}
+
+
+/* CLICK */
+
+.asset-upload-button:active,
+.refresh-button:active,
+.asset-admin-card button:active,
+.asset-admin-card a:active {
+    transform: translateY(0);
+}
+
+
+/* FILE PICKER */
+
+.asset-file-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 14px 18px;
+
+    border: 1px dashed rgba(80, 150, 255, 0.4);
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.asset-file-label:hover {
+    border-color: rgba(255, 40, 190, 0.7);
+
+    box-shadow:
+        0 0 15px rgba(60, 100, 255, 0.15);
+}
+
+
+/* HIDE DEFAULT FILE INPUT */
+
+#assetFile {
+    display: none;
+}
+
+
+/* + ICON */
+
+.asset-file-icon {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    font-size: 22px;
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #147cff,
+            #b42cff,
+            #ff218c
+        );
+
+    box-shadow:
+        0 0 15px rgba(100, 50, 255, 0.3);
+}
+/* =========================================
+   LEADERBOARD MANAGER
+========================================= */
+
+.leaderboard-manager {
+
+    margin-top: 100px;
+
+    padding-top: 80px;
+
+    border-top:
+        1px solid
+        rgba(100, 150, 255, .12);
+
+}
+
+
+.leaderboard-admin-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 35px;
+
+}
+
+
+.leaderboard-admin-row {
+
+    display: grid;
+
+    grid-template-columns:
+        55px 1fr 150px 50px;
+
+    gap: 12px;
+
+    align-items: center;
+
+    padding: 13px;
+
+    border:
+        1px solid
+        rgba(100, 150, 255, .18);
+
+    border-radius: 12px;
+
+    background:
+        rgba(8, 12, 30, .75);
+
+}
+
+
+.leaderboard-admin-rank {
+
+    text-align: center;
+
+    color: #63baff;
+
+    font-weight: 900;
+
+    font-size: 13px;
+}
+
+
+.leaderboard-admin-row input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 11px;
+
+    border:
+        1px solid
+        rgba(100, 150, 255, .25);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background:
+        rgba(0, 0, 0, .3);
+
+    color: white;
+
+    font-family: inherit;
+}
+
+
+.leaderboard-admin-row input:focus {
+
+    border-color:
+        rgba(80, 170, 255, .7);
+
+    box-shadow:
+        0 0 15px
+        rgba(50, 130, 255, .15);
+
+}
+
+
+.leaderboard-delete {
+
+    width: 42px;
+
+    height: 42px;
+
+    border:
+        1px solid
+        rgba(255, 50, 120, .3);
+
+    border-radius: 8px;
+
+    background:
+        rgba(255, 30, 100, .08);
+
+    color: #ff5b9d;
+
+    cursor: pointer;
+
+    font-weight: 900;
+}
+
+
+.leaderboard-delete:hover {
+
+    background:
+        rgba(255, 30, 100, .2);
+
+    box-shadow:
+        0 0 15px
+        rgba(255, 30, 100, .2);
+
+}
+
+
+.leaderboard-admin-actions {
+
+    display: flex;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+    margin-top: 22px;
+
+}
+
+
+@media (max-width: 600px) {
+
+    .leaderboard-admin-row {
+
+        grid-template-columns:
+            40px 1fr 100px 42px;
+
+    }
+
+}
+/* =========================================
+   NOTIFICATION MANAGER
+========================================= */
+
+.notification-manager {
+
+    margin-top: 100px;
+
+    padding-top: 80px;
+
+    border-top:
+        1px solid
+        rgba(100, 150, 255, .12);
+
+}
+
+
+.notification-create-box {
+
+    margin-top: 30px;
+
+    padding: 25px;
+
+    border:
+        1px solid
+        rgba(80, 160, 255, .18);
+
+    border-radius: 15px;
+
+    background:
+        rgba(7, 12, 30, .65);
+
+}
+
+
+.notification-field {
+
+    margin-bottom: 18px;
+
+}
+
+
+.notification-field label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color:
+        #697897;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.notification-field input,
+.notification-field textarea,
+.notification-field select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px;
+
+    border:
+        1px solid
+        rgba(90, 150, 255, .18);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background:
+        rgba(3, 6, 18, .8);
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+}
+
+
+.notification-field textarea {
+
+    min-height: 110px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+
+}
+
+
+.notification-field input:focus,
+.notification-field textarea:focus,
+.notification-field select:focus {
+
+    border-color:
+        #38baff;
+
+    box-shadow:
+        0 0 18px
+        rgba(40, 170, 255, .12);
+
+}
+
+
+.notification-admin-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+}
+
+
+.notification-admin-card {
+
+    position: relative;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        rgba(80, 150, 255, .15);
+
+    border-radius: 12px;
+
+    background:
+        rgba(8, 12, 30, .8);
+
+}
+
+
+.notification-admin-type {
+
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color:
+        #62bfff;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+}
+
+
+.notification-admin-title {
+
+    margin-bottom: 6px;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 900;
+
+}
+
+
+.notification-admin-message {
+
+    color:
+        #8794b2;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+
+    padding-right: 90px;
+
+}
+
+
+.notification-admin-date {
+
+    margin-top: 10px;
+
+    color:
+        #55627d;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.notification-delete {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    padding: 8px 11px;
+
+    border:
+        1px solid
+        rgba(255, 60, 120, .25);
+
+    border-radius: 7px;
+
+    background:
+        rgba(100, 20, 50, .18);
+
+    color:
+        #ff709f;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+}
+
+
+.notification-delete:hover {
+
+    border-color:
+        #ff4d8c;
+
+    background:
+        rgba(150, 20, 65, .3);
+
+}
+/* =========================================
+   STUDENT OF THE WEEK ADMIN
+========================================= */
+
+.student-week-manager {
+
+    margin-top: 100px;
+
+    padding-top: 80px;
+
+    border-top:
+        1px solid
+        rgba(100, 150, 255, .12);
+
+}
+
+
+.student-week-box {
+
+    margin-top: 30px;
+
+    padding: 25px;
+
+    border:
+        1px solid
+        rgba(80, 160, 255, .18);
+
+    border-radius: 15px;
+
+    background:
+        rgba(7, 12, 30, .65);
+
+}
+
+
+.student-week-current {
+
+    margin-top: 25px;
+
+    padding: 20px;
+
+    border:
+        1px solid
+        rgba(255, 190, 40, .2);
+
+    border-radius: 12px;
+
+    background:
+        rgba(40, 25, 5, .18);
+
+    color: #d9e1f7;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+
+}
+
+/* =========================================
+   STUDENT ACHIEVEMENTS MANAGER
+========================================= */
+
+.student-achievements-manager {
+
+    margin-top: 100px;
+
+    padding-top: 80px;
+
+    border-top:
+        1px solid
+        rgba(100, 150, 255, .12);
+
+}
+
+
+.student-achievement-create-box {
+
+    margin-top: 30px;
+
+    padding: 25px;
+
+    border:
+        1px solid
+        rgba(80, 160, 255, .18);
+
+    border-radius: 15px;
+
+    background:
+        rgba(7, 12, 30, .65);
+
+}
+
+
+.student-achievements-admin-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        12px;
+
+    margin-top:
+        25px;
+
+}
+
+
+.student-achievement-admin-card {
+
+    position:
+        relative;
+
+    padding:
+        20px 110px 20px 20px;
+
+    border:
+        1px solid
+        rgba(80, 150, 255, .15);
+
+    border-radius:
+        13px;
+
+    background:
+        rgba(8, 12, 30, .8);
+
+}
+
+
+.student-achievement-admin-student {
+
+    margin-bottom:
+        8px;
+
+    color:
+        #62bfff;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        2px;
+
+}
+
+
+.student-achievement-admin-title {
+
+    color:
+        white;
+
+    font-size:
+        14px;
+
+    font-weight:
+        900;
+
+}
+
+
+.student-achievement-admin-description {
+
+    margin-top:
+        8px;
+
+    color:
+        #909cb8;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.7;
+
+}
+
+
+.student-achievement-admin-meta {
+
+    margin-top:
+        11px;
+
+    color:
+        #596681;
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.student-achievement-admin-icon {
+
+    position:
+        absolute;
+
+    top:
+        18px;
+
+    right:
+        70px;
+
+    font-size:
+        25px;
+
+}
+
+
+.student-achievement-admin-delete {
+
+    position:
+        absolute;
+
+    top:
+        15px;
+
+    right:
+        15px;
+
+    padding:
+        9px 11px;
+
+    border:
+        1px solid
+        rgba(255, 60, 120, .25);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(100, 20, 50, .18);
+
+    color:
+        #ff709f;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.student-achievement-admin-delete:hover {
+
+    border-color:
+        #ff4d8c;
+
+    background:
+        rgba(150, 20, 65, .3);
+
+}
+
+
+@media (max-width: 650px) {
+
+    .student-achievement-admin-card {
+
+        padding:
+            20px 20px 65px 20px;
+
+    }
+
+
+    .student-achievement-admin-delete {
+
+        right:
+            15px;
+
+        top:
+            auto;
+
+        bottom:
+            15px;
+
+    }
+
+
+    .student-achievement-admin-icon {
+
+        right:
+            20px;
+
+    }
+
+}
+
+/* =========================================
+   SHOUTBOX MANAGER
+========================================= */
+
+.shoutbox-manager {
+
+    margin-top: 100px;
+
+    padding-top: 80px;
+
+    border-top:
+        1px solid
+        rgba(100, 150, 255, .12);
+
+}
+
+
+.shoutbox-admin-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        12px;
+
+    margin-top:
+        25px;
+
+}
+
+
+.shoutbox-admin-card {
+
+    position: relative;
+
+    padding:
+        18px 100px 18px 18px;
+
+    border:
+        1px solid
+        rgba(80, 150, 255, .15);
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(8, 12, 30, .8);
+
+}
+
+
+.shoutbox-admin-name {
+
+    margin-bottom:
+        7px;
+
+    color:
+        #62bfff;
+
+    font-size:
+        10px;
+
+    font-weight:
+        1000;
+
+    letter-spacing:
+        1px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.shoutbox-admin-message {
+
+    color:
+        #d7def2;
+
+    font-size:
+        11px;
+
+    line-height:
+        1.6;
+
+    word-break:
+        break-word;
+
+}
+
+
+.shoutbox-admin-date {
+
+    margin-top:
+        9px;
+
+    color:
+        #56637d;
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.shoutbox-admin-delete {
+
+    position:
+        absolute;
+
+    top:
+        15px;
+
+    right:
+        15px;
+
+    padding:
+        9px 11px;
+
+    border:
+        1px solid
+        rgba(255, 60, 120, .25);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(100, 20, 50, .18);
+
+    color:
+        #ff709f;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
+    cursor:
+        pointer;
+}
+
+
+.shoutbox-admin-delete:hover {
+
+    border-color:
+        #ff4d8c;
+
+    background:
+        rgba(150, 20, 65, .3);
+
+    box-shadow:
+        0 0 15px
+        rgba(255, 30, 100, .15);
+
+}
+
+/* =========================================
+   ANNOUNCEMENT MANAGER
+========================================= */
+
+.announcement-manager {
+
+    margin-top: 100px;
+
+    padding-top: 80px;
+
+    border-top:
+        1px solid
+        rgba(100, 150, 255, .12);
+
+}
+
+
+.announcement-create-box {
+
+    margin-top: 30px;
+
+    padding: 25px;
+
+    border:
+        1px solid
+        rgba(80, 160, 255, .18);
+
+    border-radius: 15px;
+
+    background:
+        rgba(7, 12, 30, .65);
+
+}
+
+
+.announcement-form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+
+}
+
+
+.announcement-admin-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        12px;
+
+    margin-top:
+        25px;
+
+}
+
+
+.announcement-admin-card {
+
+    position:
+        relative;
+
+    padding:
+        20px 105px 20px 20px;
+
+    border:
+        1px solid
+        rgba(80, 150, 255, .15);
+
+    border-radius:
+        13px;
+
+    background:
+        rgba(8, 12, 30, .8);
+
+}
+
+
+.announcement-admin-type {
+
+    margin-bottom:
+        8px;
+
+    color:
+        #62bfff;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        2px;
+
+}
+
+
+.announcement-admin-title {
+
+    margin-bottom:
+        7px;
+
+    color:
+        white;
+
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+}
+
+
+.announcement-admin-message {
+
+    color:
+        #9aa5c1;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.7;
+
+}
+
+
+.announcement-admin-date {
+
+    margin-top:
+        11px;
+
+    color:
+        #5d6983;
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.announcement-admin-delete {
+
+    position:
+        absolute;
+
+    top:
+        15px;
+
+    right:
+        15px;
+
+    padding:
+        9px 11px;
+
+    border:
+        1px solid
+        rgba(255, 60, 120, .25);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(100, 20, 50, .18);
+
+    color:
+        #ff709f;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.announcement-admin-delete:hover {
+
+    border-color:
+        #ff4d8c;
+
+    background:
+        rgba(150, 20, 65, .3);
+
+}
+
+
+@media (max-width: 650px) {
+
+    .announcement-form-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+/* =========================================
+   PENDING AUDIO / VIDEO
+========================================= */
+
+.media-admin-preview {
+
+    width: 100%;
+
+    min-height: 240px;
+
+    padding: 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    background:
+        rgba(3, 7, 20, .95);
+
+    border-radius: 12px;
+
+}
+
+
+.media-admin-icon {
+
+    font-size: 46px;
+
+}
+
+
+.media-admin-type {
+
+    color:
+        #52cfff;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+}
+
+
+.admin-audio-player {
+
+    width: 100%;
+
+    max-width: 430px;
+
+}
+
+
+.admin-video-player {
+
+    width: 100%;
+
+    max-height: 330px;
+
+    display: block;
+
+    background: #000;
+
+    object-fit: contain;
+
+}
+
+/* =========================================
+   ADMIN LOGIN
+========================================= */
+
+.admin-login-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(0, 140, 255, .12),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(255, 30, 160, .10),
+            transparent 35%
+        ),
+
+        rgba(2, 3, 12, .98);
+
+    backdrop-filter:
+        blur(20px);
+}
+
+
+.admin-login-overlay.hidden {
+
+    display: none;
+
+}
+
+
+.admin-login-box {
+
+    width:
+        min(460px, 100%);
+
+    padding:
+        32px;
+
+    border:
+        1px solid
+        rgba(80, 160, 255, .22);
+
+    border-radius:
+        18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 15, 35, .97),
+            rgba(5, 7, 20, .98)
+        );
+
+    box-shadow:
+        0 30px 100px
+        rgba(0, 0, 0, .55);
+
+}
+
+
+.admin-login-box h2 {
+
+    margin:
+        12px 0 10px;
+
+    font-size:
+        34px;
+
+    letter-spacing:
+        -1px;
+
+}
+
+
+.admin-login-box h2 span {
+
+    background:
+        linear-gradient(
+            90deg,
+            #1baeff,
+            #8245ff,
+            #ff2998
+        );
+
+    -webkit-background-clip:
+        text;
+
+    background-clip:
+        text;
+
+    color:
+        transparent;
+
+}
+
+
+.admin-login-box p {
+
+    color:
+        #7885a5;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.6;
+
+    margin-bottom:
+        20px;
+
+}
+
+
+#adminPasswordInput {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border:
+        1px solid
+        rgba(80, 150, 255, .20);
+
+    border-radius:
+        9px;
+
+    outline: none;
+
+    background:
+        rgba(3, 6, 18, .85);
+
+    color: white;
+
+    font-family: inherit;
+
+}
+
+
+#adminPasswordInput:focus {
+
+    border-color:
+        rgba(70, 170, 255, .65);
+
+    box-shadow:
+        0 0 20px
+        rgba(40, 140, 255, .12);
+
+}
+
+
+.admin-login-box
+.asset-upload-button {
+
+    width: 100%;
+
+    margin-top: 12px;
+
+}
+
+
+.admin-login-error {
+
+    min-height: 18px;
+
+    margin-top: 12px;
+
+    color:
+        #ff709f;
+
+    font-size:
+        9px;
+
+}
+
+
+/* =========================================
+   STUDENT SECURITY
+========================================= */
+
+.student-security-manager {
+
+    margin-top:
+        100px;
+
+    padding-top:
+        80px;
+
+    border-top:
+        1px solid
+        rgba(100, 150, 255, .12);
+
+}
+
+
+.student-security-toolbar {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        15px;
+
+    margin-top:
+        30px;
+
+}
+
+
+.student-security-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        12px;
+
+    margin-top:
+        20px;
+
+}
+
+
+.student-security-card {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr auto;
+
+    gap:
+        20px;
+
+    align-items:
+        center;
+
+    padding:
+        18px;
+
+    border:
+        1px solid
+        rgba(80, 150, 255, .15);
+
+    border-radius:
+        13px;
+
+    background:
+        rgba(8, 12, 30, .80);
+
+}
+
+
+.student-security-name {
+
+    color:
+        white;
+
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+}
+
+
+.student-security-status {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px;
+
+    margin-top:
+        8px;
+
+}
+
+
+.security-badge {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    padding:
+        6px 9px;
+
+    border:
+        1px solid
+        rgba(100, 160, 255, .20);
+
+    border-radius:
+        7px;
+
+    color:
+        #9fb1d5;
+
+    font-size:
+        7px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.security-badge.pin {
+
+    color:
+        #63d9ae;
+
+    border-color:
+        rgba(50, 220, 150, .25);
+
+}
+
+
+.security-badge.no-pin {
+
+    color:
+        #f0ba67;
+
+    border-color:
+        rgba(240, 180, 70, .25);
+
+}
+
+
+.security-badge.banned {
+
+    color:
+        #ff709f;
+
+    border-color:
+        rgba(255, 60, 120, .30);
+
+}
+
+
+.student-security-reason {
+
+    margin-top:
+        8px;
+
+    color:
+        #697797;
+
+    font-size:
+        8px;
+
+    line-height:
+        1.5;
+
+}
+
+
+.student-security-actions {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        8px;
+
+}
+
+
+.security-action-button {
+
+    padding:
+        10px 13px;
+
+    border:
+        1px solid
+        rgba(80, 150, 255, .25);
+
+    border-radius:
+        8px;
+
+    background:
+        rgba(10, 25, 55, .70);
+
+    color:
+        #c8dcff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.security-action-button:hover {
+
+    border-color:
+        #38baff;
+
+}
+
+
+.security-action-button.ban {
+
+    color:
+        #ff789f;
+
+    border-color:
+        rgba(255, 60, 120, .25);
+
+    background:
+        rgba(100, 20, 50, .16);
+
+}
+
+
+.security-action-button.ban:hover {
+
+    border-color:
+        #ff4d8c;
+
+    background:
+        rgba(150, 20, 65, .28);
+
+}
+
+
+.security-action-button.unban {
+
+    color:
+        #61e8b5;
+
+    border-color:
+        rgba(40, 220, 150, .25);
+
+    background:
+        rgba(10, 100, 75, .16);
+
+}
+
+
+.security-pin-result {
+
+    position:
+        fixed;
+
+    right:
+        25px;
+
+    bottom:
+        25px;
+
+    z-index:
+        100001;
+
+    width:
+        min(360px, calc(100% - 40px));
+
+    padding:
+        20px;
+
+    border:
+        1px solid
+        rgba(60, 220, 170, .35);
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(5, 15, 20, .97);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.4);
+
+    display:
+        none;
+
+}
+
+
+.security-pin-result.show {
+
+    display:
+        block;
+
+}
+
+
+.security-pin-result-title {
+
+    color:
+        #61e8b5;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        2px;
+
+}
+
+
+.security-pin-result-name {
+
+    margin-top:
+        8px;
+
+    color:
+        white;
+
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+}
+
+
+.security-pin-value {
+
+    margin-top:
+        12px;
+
+    padding:
+        14px;
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(0,0,0,.35);
+
+    color:
+        #fff;
+
+    text-align:
+        center;
+
+    font-family:
+        monospace;
+
+    font-size:
+        22px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        5px;
+
+}
+
+
+.security-pin-note {
+
+    margin-top:
+        10px;
+
+    color:
+        #73819e;
+
+    font-size:
+        8px;
+
+    line-height:
+        1.6;
+
+}
+
+
+@media (max-width: 700px) {
+
+    .student-security-card {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .student-security-actions {
+
+        justify-content:
+            flex-start;
+
+    }
+
+
+    .student-security-toolbar {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =========================================
+     ADMIN SECURITY LOGIN
+========================================= -->
+
+<div
+    id="adminLoginOverlay"
+    class="admin-login-overlay"
+>
+
+    <div class="admin-login-box">
+
+        <div class="section-label">
+            4MS3 ADMIN
+        </div>
+
+        <h2>
+            SECURE <span>ACCESS.</span>
+        </h2>
+
+        <p>
+            Enter the administrator password
+            to access the control panel.
+        </p>
+
+        <input
+            id="adminPasswordInput"
+            type="password"
+            placeholder="Admin password..."
+            autocomplete="current-password"
+        >
+
+        <button
+            id="adminLoginButton"
+            class="asset-upload-button"
+            type="button"
+        >
+            🔐 ENTER ADMIN
+        </button>
+
+        <div
+            id="adminLoginError"
+            class="admin-login-error"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<header>
+
+    <div class="top-line">
+
+        <a
+            href="/"
+            class="logo"
+        >
+            <img
+                src="star.png"
+                alt="4MS3"
+            >
+        </a>
+
+        <div class="admin-label">
+            PRIVATE PHOTO REVIEW
+        </div>
+
+    </div>
+
+
+    <h1>
+        PHOTO <span>REVIEW.</span>
+    </h1>
+
+    <div class="subtitle">
+        Review photos submitted by the 4MS3 class
+        before they appear on the public website.
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <div class="toolbar">
+
+        <div
+            class="pending-count"
+            id="pendingCount"
+        >
+            LOADING...
+        </div>
+
+
+        <button
+            class="refresh-button"
+            id="refreshButton"
+        >
+            ↻ REFRESH
+        </button>
+
+    </div>
+
+
+    <div
+        class="pending-grid"
+        id="pendingGrid"
+    ></div>
+
+
+<!-- =========================================
+     ASSETS MANAGER
+========================================= -->
+
+<section class="assets-manager">
+
+    <div class="assets-heading">
+
+        <div class="section-label">
+            PRIVATE ASSET STORAGE
+        </div>
+
+        <h2>
+            ASSET <span>MANAGER.</span>
+        </h2>
+
+        <p>
+            Upload logos, wallpapers and other
+            resources for the 4MS3 class.
+        </p>
+
+    </div>
+
+
+    <!-- UPLOAD BOX -->
+
+    <div class="asset-upload-box">
+
+        <div class="upload-title">
+            + UPLOAD NEW ASSET
+        </div>
+
+
+        <form id="assetUploadForm">
+
+            <div class="asset-form-grid">
+
+                <div class="asset-field">
+
+                    <label for="assetTitle">
+                        ASSET NAME
+                    </label>
+
+                    <input
+                        id="assetTitle"
+                        name="title"
+                        type="text"
+                        placeholder="4MS3 Neon Wallpaper"
+                        maxlength="80"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="asset-field">
+
+                    <label for="assetCategory">
+                        CATEGORY
+                    </label>
+
+                    <select
+                        id="assetCategory"
+                        name="category"
+                    >
+
+                        <option value="Wallpapers">
+                            Wallpapers
+                        </option>
+
+                        <option value="Logos">
+                            Logos
+                        </option>
+
+                        <option value="Graphics">
+                            Graphics
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="asset-file-area">
+
+                <label
+                    for="assetFile"
+                    class="asset-file-label"
+                >
+
+                    <div class="asset-file-icon">
+                        ＋
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            CHOOSE ASSET
+                        </strong>
+
+                        <small id="assetFileName">
+                            PNG, JPG, WEBP, SVG, ZIP...
+                        </small>
+
+                    </div>
+
+                </label>
+
+
+                <input
+                    id="assetFile"
+                    name="asset"
+                    type="file"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="asset-upload-button"
+                id="assetUploadButton"
+            >
+                📦 UPLOAD ASSET
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ASSET LIST -->
+
+    <div class="asset-list-header">
+
+        <div class="section-label">
+            YOUR ASSETS
+        </div>
+
+        <button
+            id="refreshAssets"
+            class="refresh-button"
+            type="button"
+        >
+            ↻ REFRESH
+        </button>
+
+    </div>
+
+
+    <div
+        id="assetAdminGrid"
+        class="asset-admin-grid"
+    ></div>
+
+</section>
+
+
+<!-- =========================================
+     LEADERBOARD MANAGER
+========================================= -->
+
+<section class="leaderboard-manager">
+
+    <div class="assets-heading">
+
+        <div class="section-label">
+            PRIVATE CLASS DATA
+        </div>
+
+        <h2>
+            LEADERBOARD <span>MANAGER.</span>
+        </h2>
+
+        <p>
+            Manage student averages and class rankings.
+            Rankings are automatically sorted from highest to lowest.
+        </p>
+
+    </div>
+
+
+    <div
+        id="leaderboardAdminList"
+        class="leaderboard-admin-list"
+    ></div>
+
+
+    <div class="leaderboard-admin-actions">
+
+        <button
+            type="button"
+            id="addLeaderboardStudent"
+            class="asset-upload-button"
+        >
+            + ADD STUDENT
+        </button>
+
+
+        <button
+            type="button"
+            id="saveLeaderboard"
+            class="asset-upload-button"
+        >
+            🏆 SAVE RANKINGS
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================
+     NOTIFICATION MANAGER
+========================================= -->
+
+<section class="notification-manager">
+
+    <div class="assets-heading">
+
+        <div class="section-label">
+            CLASS ACTIVITY
+        </div>
+
+        <h2>
+            NOTIFICATION <span>MANAGER.</span>
+        </h2>
+
+        <p>
+            Publish updates that classmates will see
+            in the 4MS3 notification center.
+        </p>
+
+    </div>
+
+
+    <div class="notification-create-box">
+
+        <div class="upload-title">
+            + CREATE NOTIFICATION
+        </div>
+
+
+        <form id="notificationForm">
+
+            <div class="notification-field">
+
+                <label for="notificationTitle">
+                    TITLE
+                </label>
+
+                <input
+                    id="notificationTitle"
+                    type="text"
+                    maxlength="100"
+                    placeholder="Leaderboard updated!"
+                    required
+                >
+
+            </div>
+
+
+            <div class="notification-field">
+
+                <label for="notificationMessage">
+                    MESSAGE
+                </label>
+
+                <textarea
+                    id="notificationMessage"
+                    maxlength="300"
+                    placeholder="The class rankings have been updated."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <div class="notification-field">
+
+                <label for="notificationType">
+                    TYPE
+                </label>
+
+                <select id="notificationType">
+
+                    <option value="info">
+                        ℹ INFO
+                    </option>
+
+                    <option value="gallery">
+                        📸 GALLERY
+                    </option>
+
+                    <option value="asset">
+                        📦 ASSET
+                    </option>
+
+                    <option value="leaderboard">
+                        🏆 LEADERBOARD
+                    </option>
+
+                    <option value="event">
+                        📅 EVENT
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="publishNotification"
+                class="asset-upload-button"
+            >
+                🔔 PUBLISH NOTIFICATION
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="asset-list-header">
+
+        <div class="section-label">
+            PUBLISHED NOTIFICATIONS
+        </div>
+
+        <button
+            id="refreshNotifications"
+            class="refresh-button"
+            type="button"
+        >
+            ↻ REFRESH
+        </button>
+
+    </div>
+
+
+    <div
+        id="notificationAdminList"
+        class="notification-admin-list"
+    ></div>
+
+</section>
+
+<!-- =========================================
+     STUDENT OF THE WEEK
+========================================= -->
+
+<section class="student-week-manager">
+
+    <div class="assets-heading">
+
+        <div class="section-label">
+            CLASS SPOTLIGHT
+        </div>
+
+        <h2>
+            STUDENT OF THE <span>WEEK.</span>
+        </h2>
+
+        <p>
+            Choose a student and publish a custom spotlight
+            on the 4MS3 website.
+        </p>
+
+    </div>
+
+
+    <div class="student-week-box">
+
+        <form id="studentWeekForm">
+
+            <div class="notification-field">
+
+                <label for="studentWeekStudent">
+                    STUDENT
+                </label>
+
+                <select
+                    id="studentWeekStudent"
+                    required
+                ></select>
+
+            </div>
+
+
+            <div class="notification-field">
+
+                <label for="studentWeekTitle">
+                    TITLE
+                </label>
+
+                <input
+                    id="studentWeekTitle"
+                    type="text"
+                    maxlength="100"
+                    placeholder="Top Performance"
+                    required
+                >
+
+            </div>
+
+
+            <div class="notification-field">
+
+                <label for="studentWeekReason">
+                    REASON
+                </label>
+
+                <textarea
+                    id="studentWeekReason"
+                    maxlength="300"
+                    placeholder="Excellent work and dedication this week."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <button
+                id="publishStudentWeek"
+                class="asset-upload-button"
+                type="submit"
+            >
+                ⭐ PUBLISH STUDENT OF THE WEEK
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div
+        id="studentWeekCurrent"
+        class="student-week-current"
+    ></div>
+
+</section>
+
+<!-- =========================================
+     STUDENT ACHIEVEMENTS MANAGER
+========================================= -->
+
+<section class="student-achievements-manager">
+
+    <div class="assets-heading">
+
+        <div class="section-label">
+            STUDENT PROFILES
+        </div>
+
+        <h2>
+            ACHIEVEMENT <span>MANAGER.</span>
+        </h2>
+
+        <p>
+            Give individual students achievements
+            that appear on their 4MS3 profile.
+        </p>
+
+    </div>
+
+
+    <!-- ==============================
+         ADD ACHIEVEMENT
+    =============================== -->
+
+    <div class="student-achievement-create-box">
+
+        <div class="upload-title">
+            + ADD STUDENT ACHIEVEMENT
+        </div>
+
+
+        <form
+            id="studentAchievementForm"
+        >
+
+            <div class="announcement-form-grid">
+
+                <div
+                    class="notification-field"
+                >
+
+                    <label
+                        for="achievementStudent"
+                    >
+                        STUDENT
+                    </label>
+
+                    <select
+                        id="achievementStudent"
+                        required
+                    ></select>
+
+                </div>
+
+
+                <div
+                    class="notification-field"
+                >
+
+                    <label
+                        for="achievementIcon"
+                    >
+                        ICON
+                    </label>
+
+                    <input
+                        id="achievementIcon"
+                        type="text"
+                        maxlength="10"
+                        value="🏆"
+                        placeholder="🏆"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="notification-field"
+            >
+
+                <label
+                    for="achievementTitle"
+                >
+                    TITLE
+                </label>
+
+                <input
+                    id="achievementTitle"
+                    type="text"
+                    maxlength="100"
+                    placeholder="Chess Champion"
+                    required
+                >
+
+            </div>
+
+
+            <div
+                class="notification-field"
+            >
+
+                <label
+                    for="achievementDate"
+                >
+                    DATE / YEAR
+                </label>
+
+                <input
+                    id="achievementDate"
+                    type="text"
+                    maxlength="50"
+                    placeholder="2025 — 2026"
+                >
+
+            </div>
+
+
+            <div
+                class="notification-field"
+            >
+
+                <label
+                    for="achievementDescription"
+                >
+                    DESCRIPTION
+                </label>
+
+                <textarea
+                    id="achievementDescription"
+                    maxlength="400"
+                    placeholder="Won first place in the school chess competition."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <button
+                id="addStudentAchievement"
+                class="asset-upload-button"
+                type="submit"
+            >
+                🏆 ADD ACHIEVEMENT
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ==============================
+         CURRENT ACHIEVEMENTS
+    =============================== -->
+
+    <div class="asset-list-header">
+
+        <div class="section-label">
+            STUDENT ACHIEVEMENTS
+        </div>
+
+        <button
+            id="refreshStudentAchievements"
+            class="refresh-button"
+            type="button"
+        >
+            ↻ REFRESH
+        </button>
+
+    </div>
+
+
+    <div
+        id="studentAchievementsAdminList"
+        class="student-achievements-admin-list"
+    ></div>
+
+</section>
+
+<!-- =========================================
+     STUDENT SECURITY MANAGER
+========================================= -->
+
+<section class="student-security-manager">
+
+    <div class="assets-heading">
+
+        <div class="section-label">
+            WEBSITE SECURITY
+        </div>
+
+        <h2>
+            STUDENT <span>SECURITY.</span>
+        </h2>
+
+        <p>
+            Manage student access, private PINs,
+            and website bans.
+        </p>
+
+    </div>
+
+
+    <div class="student-security-toolbar">
+
+        <div class="section-label">
+            STUDENT ACCESS
+        </div>
+
+        <button
+            id="refreshStudentSecurity"
+            class="refresh-button"
+            type="button"
+        >
+            ↻ REFRESH
+        </button>
+
+    </div>
+
+
+    <div
+        id="studentSecurityList"
+        class="student-security-list"
+    ></div>
+
+</section>
+
+<!-- =========================================
+     SHOUTBOX MANAGER
+========================================= -->
+
+<section class="shoutbox-manager">
+
+    <div class="assets-heading">
+
+        <div class="section-label">
+            CLASS CHAT MODERATION
+        </div>
+
+        <h2>
+            SHOUTBOX <span>MANAGER.</span>
+        </h2>
+
+        <p>
+            Review and remove messages from the public 4MS3 shoutbox.
+        </p>
+
+    </div>
+
+
+    <div class="asset-list-header">
+
+        <div class="section-label">
+            PUBLISHED MESSAGES
+        </div>
+
+        <button
+            id="refreshShoutboxAdmin"
+            class="refresh-button"
+            type="button"
+        >
+            ↻ REFRESH
+        </button>
+
+    </div>
+
+
+    <div
+        id="shoutboxAdminList"
+        class="shoutbox-admin-list"
+    ></div>
+
+</section>
+
+<!-- =========================================
+     ANNOUNCEMENT MANAGER
+========================================= -->
+
+<section class="announcement-manager">
+
+    <div class="assets-heading">
+
+        <div class="section-label">
+            CLASS INFORMATION
+        </div>
+
+        <h2>
+            ANNOUNCEMENT <span>MANAGER.</span>
+        </h2>
+
+        <p>
+            Publish homework, important notices, events and
+            other information for the 4MS3 class.
+        </p>
+
+    </div>
+
+
+    <div class="announcement-create-box">
+
+        <div class="upload-title">
+            + CREATE ANNOUNCEMENT
+        </div>
+
+
+        <form id="announcementForm">
+
+            <div class="notification-field">
+
+                <label for="announcementTitle">
+                    TITLE
+                </label>
+
+                <input
+                    id="announcementTitle"
+                    type="text"
+                    maxlength="100"
+                    placeholder="Math homework due Friday"
+                    required
+                >
+
+            </div>
+
+
+            <div class="notification-field">
+
+                <label for="announcementMessage">
+                    MESSAGE
+                </label>
+
+                <textarea
+                    id="announcementMessage"
+                    maxlength="500"
+                    placeholder="Complete exercises 12–18."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <div class="announcement-form-grid">
+
+                <div class="notification-field">
+
+                    <label for="announcementType">
+                        TYPE
+                    </label>
+
+                    <select
+                        id="announcementType"
+                    >
+
+                        <option value="homework">
+                            📚 HOMEWORK
+                        </option>
+
+                        <option value="important">
+                            ⚠ IMPORTANT
+                        </option>
+
+                        <option value="event">
+                            📅 EVENT
+                        </option>
+
+                        <option value="general">
+                            ℹ GENERAL
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="notification-field">
+
+                    <label for="announcementDueDate">
+                        DUE / EVENT DATE
+                    </label>
+
+                    <input
+                        id="announcementDueDate"
+                        type="date"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="publishAnnouncement"
+                class="asset-upload-button"
+                type="submit"
+            >
+                📢 PUBLISH ANNOUNCEMENT
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="asset-list-header">
+
+        <div class="section-label">
+            PUBLISHED ANNOUNCEMENTS
+        </div>
+
+        <button
+            id="refreshAnnouncements"
+            class="refresh-button"
+            type="button"
+        >
+            ↻ REFRESH
+        </button>
+
+    </div>
+
+
+    <div
+        id="announcementAdminList"
+        class="announcement-admin-list"
+    ></div>
+
+</section>
+
+
+</main>
+
+
+<div
+    class="status"
+    id="status"
+></div>
+
+
+<script>
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const pendingGrid =
+    document.getElementById(
+        "pendingGrid"
+    );
+
+
+const pendingCount =
+    document.getElementById(
+        "pendingCount"
+    );
+
+
+const refreshButton =
+    document.getElementById(
+        "refreshButton"
+    );
+
+
+const statusBox =
+    document.getElementById(
+        "status"
+    );
+
+
+/* =========================================
+   STATUS MESSAGE
+========================================= */
+
+let statusTimer;
+
+
+function showStatus(
+    message,
+    type = ""
+) {
+
+    clearTimeout(statusTimer);
+
+    statusBox.textContent =
+        message;
+
+    statusBox.className =
+        "status show " + type;
+
+
+    statusTimer = setTimeout(() => {
+
+        statusBox.classList.remove(
+            "show"
+        );
+
+    }, 3000);
+
+}
+
+
+/* =========================================
+   LOAD PENDING PHOTOS
+========================================= */
+
+async function loadPendingPhotos() {
+
+    pendingCount.textContent =
+        "LOADING...";
+
+
+    pendingGrid.innerHTML = "";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/pending"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Couldn't load photos."
+            );
+
+        }
+
+
+        const photos =
+            await response.json();
+
+
+        if (!photos.length) {
+
+            pendingCount.textContent =
+                "0 PHOTOS WAITING";
+
+            pendingGrid.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        ✓
+                    </div>
+
+                    <div class="empty-title">
+                        ALL CLEAR
+                    </div>
+
+                    <div class="empty-text">
+                        No photos are waiting for review.
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        pendingCount.textContent =
+            `${photos.length} PHOTO${
+                photos.length === 1
+                    ? ""
+                    : "S"
+            } WAITING FOR REVIEW`;
+
+
+        photos.forEach(
+            photo => {
+
+                createPhotoCard(
+                    photo
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        pendingCount.textContent =
+            "COULDN'T LOAD PHOTOS";
+
+        pendingGrid.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <div class="empty-title">
+                    SERVER ERROR
+                </div>
+
+                <div class="empty-text">
+                    Make sure server.js is running.
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE PHOTO CARD
+========================================= */
+
+function createPhotoCard(photo) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "photo-card";
+
+
+    const fileURL =
+        "/pending/" +
+        encodeURIComponent(
+            photo.filename
+        );
+
+
+    const extension =
+        photo.filename
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    const isMP3 =
+        extension === "mp3";
+
+
+    const isMP4 =
+        extension === "mp4";
+
+
+    let previewHTML = "";
+
+
+    /* =====================================
+       IMAGE
+    ===================================== */
+
+    if (
+        !isMP3 &&
+        !isMP4
+    ) {
+
+        previewHTML = `
+
+            <img
+                class="photo-image"
+                src="${fileURL}"
+                alt="Pending photo"
+            >
+
+        `;
+
+    }
+
+
+    /* =====================================
+       MP3
+    ===================================== */
+
+    else if (
+        isMP3
+    ) {
+
+        previewHTML = `
+
+            <div class="media-admin-preview">
+
+                <div class="media-admin-icon">
+                    🎵
+                </div>
+
+                <div class="media-admin-type">
+                    MP3 AUDIO
+                </div>
+
+                <audio
+                    class="admin-audio-player"
+                    controls
+                    preload="metadata"
+                    src="${fileURL}"
+                ></audio>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =====================================
+       MP4
+    ===================================== */
+
+    else if (
+        isMP4
+    ) {
+
+        previewHTML = `
+
+            <div class="media-admin-preview">
+
+                <div class="media-admin-type">
+                    🎬 MP4 VIDEO
+                </div>
+
+                <video
+                    class="admin-video-player"
+                    controls
+                    playsinline
+                    preload="metadata"
+                    src="${fileURL}"
+                ></video>
+
+            </div>
+
+        `;
+
+    }
+
+
+    card.innerHTML = `
+
+        ${previewHTML}
+
+
+        <div class="photo-info">
+
+            <div
+                class="photo-filename"
+                title="${escapeHtml(
+                    photo.originalName ||
+                    photo.filename
+                )}"
+            >
+                ${escapeHtml(
+                    photo.originalName ||
+                    photo.filename
+                )}
+            </div>
+
+
+            <div class="photo-submitter">
+
+                SUBMITTED BY:
+
+                ${escapeHtml(
+                    photo.name ||
+                    "Anonymous"
+                )}
+
+            </div>
+
+
+            <div class="photo-actions">
+
+                <button
+                    class="approve-button"
+                    data-filename="${escapeHtml(
+                        photo.filename
+                    )}"
+                >
+                    ✓ APPROVE
+                </button>
+
+
+                <button
+                    class="reject-button"
+                    data-filename="${escapeHtml(
+                        photo.filename
+                    )}"
+                >
+                    ✕ REJECT
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    const approveButton =
+        card.querySelector(
+            ".approve-button"
+        );
+
+
+    const rejectButton =
+        card.querySelector(
+            ".reject-button"
+        );
+
+
+    approveButton.addEventListener(
+        "click",
+        () => {
+
+            approvePhoto(
+                photo.filename,
+                card,
+                approveButton,
+                rejectButton
+            );
+
+        }
+    );
+
+
+    rejectButton.addEventListener(
+        "click",
+        () => {
+
+            rejectPhoto(
+                photo.filename,
+                card,
+                approveButton,
+                rejectButton
+            );
+
+        }
+    );
+
+
+    pendingGrid.appendChild(
+        card
+    );
+
+}
+
+
+/* =========================================
+   APPROVE
+========================================= */
+
+async function approvePhoto(
+    filename,
+    card,
+    approveButton,
+    rejectButton
+) {
+
+    if (
+        !confirm(
+            "Approve this photo and publish it?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    approveButton.disabled = true;
+
+    rejectButton.disabled = true;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/approve",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        filename
+                    })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok || !result.success) {
+
+            throw new Error(
+                result.message ||
+                "Approval failed."
+            );
+
+        }
+
+
+        card.remove();
+
+        showStatus(
+            "✓ PHOTO APPROVED",
+            "success"
+        );
+
+
+        updateCount();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        approveButton.disabled = false;
+
+        rejectButton.disabled = false;
+
+        showStatus(
+            "❌ COULDN'T APPROVE PHOTO",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   REJECT
+========================================= */
+
+async function rejectPhoto(
+    filename,
+    card,
+    approveButton,
+    rejectButton
+) {
+
+    if (
+        !confirm(
+            "Reject and delete this photo?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    approveButton.disabled = true;
+
+    rejectButton.disabled = true;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/reject",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        filename
+                    })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok || !result.success) {
+
+            throw new Error(
+                result.message ||
+                "Rejection failed."
+            );
+
+        }
+
+
+        card.remove();
+
+        showStatus(
+            "✓ PHOTO REJECTED",
+            "success"
+        );
+
+
+        updateCount();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        approveButton.disabled = false;
+
+        rejectButton.disabled = false;
+
+        showStatus(
+            "❌ COULDN'T REJECT PHOTO",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   COUNT
+========================================= */
+
+function updateCount() {
+
+    const cards =
+        pendingGrid.querySelectorAll(
+            ".photo-card"
+        );
+
+
+    const count =
+        cards.length;
+
+
+    pendingCount.textContent =
+        `${count} PHOTO${
+            count === 1
+                ? ""
+                : "S"
+        } WAITING FOR REVIEW`;
+
+}
+
+
+/* =========================================
+   REFRESH
+========================================= */
+
+refreshButton.addEventListener(
+    "click",
+    loadPendingPhotos
+);
+
+
+/* =========================================
+   HTML ESCAPE
+========================================= */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+loadPendingPhotos();
+
+</script>
+
+<script>
+
+/* =========================================
+   ASSET MANAGER
+========================================= */
+
+const assetForm =
+    document.getElementById(
+        "assetUploadForm"
+    );
+
+const assetFile =
+    document.getElementById(
+        "assetFile"
+    );
+
+const assetFileName =
+    document.getElementById(
+        "assetFileName"
+    );
+
+const assetGrid =
+    document.getElementById(
+        "assetAdminGrid"
+    );
+
+const assetUploadButton =
+    document.getElementById(
+        "assetUploadButton"
+    );
+
+const refreshAssets =
+    document.getElementById(
+        "refreshAssets"
+    );
+
+
+/* =========================================
+   FILE NAME DISPLAY
+========================================= */
+
+assetFile.addEventListener(
+    "change",
+    () => {
+
+        if (
+            assetFile.files.length
+        ) {
+
+            assetFileName.textContent =
+                assetFile.files[0].name;
+
+        } else {
+
+            assetFileName.textContent =
+                "PNG, JPG, WEBP, SVG, ZIP...";
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   LOAD ASSETS
+========================================= */
+
+async function loadAssets() {
+
+    assetGrid.innerHTML = `
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ⟳
+            </div>
+
+            <div class="empty-title">
+                LOADING ASSETS
+            </div>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/assets"
+            );
+
+
+        const assets =
+            await response.json();
+
+
+        if (
+            !assets.length
+        ) {
+
+            assetGrid.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📦
+                    </div>
+
+                    <div class="empty-title">
+                        NO ASSETS YET
+                    </div>
+
+                    <div class="empty-text">
+                        Upload your first 4MS3 asset above.
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        assetGrid.innerHTML = "";
+
+
+        assets.forEach(
+            asset => {
+
+                createAssetCard(
+                    asset
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        assetGrid.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <div class="empty-title">
+                    COULDN'T LOAD ASSETS
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE CARD
+========================================= */
+
+function createAssetCard(asset) {
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+
+    card.className =
+        "asset-admin-card";
+
+
+    const extension =
+        asset.filename
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    const isImage =
+        [
+            "jpg",
+            "jpeg",
+            "png",
+            "webp",
+            "gif",
+            "svg"
+        ].includes(
+            extension
+        );
+
+
+    const fileURL =
+        "/assets/files/" +
+        encodeURIComponent(
+            asset.filename
+        );
+
+
+    card.innerHTML = `
+
+        <div class="asset-preview">
+
+            ${
+                isImage
+
+                ? `
+
+                    <img
+                        src="${fileURL}"
+                        alt=""
+                    >
+
+                `
+
+                : `
+
+                    <div class="asset-no-preview">
+                        ${extension.toUpperCase()}
+                    </div>
+
+                `
+            }
+
+        </div>
+
+
+        <div class="asset-card-info">
+
+            <div
+                class="asset-card-title"
+                title="${escapeAssetText(asset.title)}"
+            >
+                ${escapeAssetText(asset.title)}
+            </div>
+
+
+            <div class="asset-card-meta">
+
+                ${escapeAssetText(asset.category)}
+                •
+                ${formatAssetSize(asset.size)}
+
+            </div>
+
+
+            <div class="asset-card-actions">
+
+                <a
+                    href="${fileURL}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    VIEW
+                </a>
+
+
+                <button
+                    class="asset-delete"
+                >
+                    DELETE
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    const deleteButton =
+        card.querySelector(
+            ".asset-delete"
+        );
+
+
+    deleteButton.addEventListener(
+        "click",
+        async () => {
+
+            const confirmed =
+                confirm(
+                    `Delete "${asset.title}"?`
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            deleteButton.disabled =
+                true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        "/api/assets/" +
+                        encodeURIComponent(
+                            asset.filename
+                        ),
+
+                        {
+                            method:
+                                "DELETE"
+                        }
+
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !result.success
+                ) {
+
+                    throw new Error(
+                        result.message ||
+                        "Delete failed."
+                    );
+
+                }
+
+
+                card.remove();
+
+                showStatus(
+                    "✓ ASSET DELETED",
+                    "success"
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                deleteButton.disabled =
+                    false;
+
+                showStatus(
+                    "❌ COULDN'T DELETE ASSET",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+    assetGrid.appendChild(
+        card
+    );
+
+}
+
+
+/* =========================================
+   UPLOAD
+========================================= */
+
+assetForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        if (
+            !assetFile.files.length
+        ) {
+
+            showStatus(
+                "❌ CHOOSE A FILE FIRST",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const formData =
+            new FormData(
+                assetForm
+            );
+
+
+        assetUploadButton.disabled =
+            true;
+
+        assetUploadButton.textContent =
+            "UPLOADING...";
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    "/api/assets/upload",
+
+                    {
+                        method:
+                            "POST",
+
+                        body:
+                            formData
+                    }
+
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "Upload failed."
+                );
+
+            }
+
+
+            assetForm.reset();
+
+
+            assetFileName.textContent =
+                "PNG, JPG, WEBP, SVG, ZIP...";
+
+
+            showStatus(
+                "✓ ASSET UPLOADED",
+                "success"
+            );
+
+
+            loadAssets();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showStatus(
+                "❌ ASSET UPLOAD FAILED",
+                "error"
+            );
+
+        }
+
+
+        assetUploadButton.disabled =
+            false;
+
+        assetUploadButton.textContent =
+            "📦 UPLOAD ASSET";
+
+    }
+);
+
+
+/* =========================================
+   SIZE
+========================================= */
+
+function formatAssetSize(bytes) {
+
+    if (
+        bytes < 1024
+    ) {
+
+        return bytes + " B";
+
+    }
+
+
+    if (
+        bytes < 1024 * 1024
+    ) {
+
+        return (
+            bytes / 1024
+        ).toFixed(1) +
+        " KB";
+
+    }
+
+
+    return (
+        bytes /
+        (1024 * 1024)
+    ).toFixed(1) +
+    " MB";
+
+}
+
+
+/* =========================================
+   ESCAPE TEXT
+========================================= */
+
+function escapeAssetText(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text || "";
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+refreshAssets.addEventListener(
+    "click",
+    loadAssets
+);
+
+
+loadAssets();
+
+</script>
+
+<script>
+
+/* =========================================
+   LEADERBOARD MANAGER
+========================================= */
+
+const leaderboardAdminList =
+    document.getElementById(
+        "leaderboardAdminList"
+    );
+
+const addLeaderboardStudent =
+    document.getElementById(
+        "addLeaderboardStudent"
+    );
+
+const saveLeaderboard =
+    document.getElementById(
+        "saveLeaderboard"
+    );
+
+
+let leaderboardData = [];
+
+
+/* =========================================
+   LOAD
+========================================= */
+
+async function loadLeaderboardAdmin() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/leaderboard"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Couldn't load leaderboard."
+            );
+
+        }
+
+
+        leaderboardData =
+            await response.json();
+
+
+        renderLeaderboardAdmin();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        leaderboardAdminList.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <div class="empty-title">
+                    COULDN'T LOAD LEADERBOARD
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   RENDER
+========================================= */
+
+function renderLeaderboardAdmin() {
+
+    leaderboardAdminList.innerHTML = "";
+
+
+    leaderboardData.forEach(
+        (student, index) => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "leaderboard-admin-row";
+
+
+            row.innerHTML = `
+
+                <div
+                    class="leaderboard-admin-rank"
+                >
+                    #${index + 1}
+                </div>
+
+
+                <input
+                    type="text"
+                    class="leaderboard-name"
+                    value="${escapeLeaderboardText(
+                        student.name
+                    )}"
+                    placeholder="Student name"
+                >
+
+
+                <input
+                    type="number"
+                    class="leaderboard-grade"
+                    value="${student.grade}"
+                    min="0"
+                    max="20"
+                    step="0.01"
+                    placeholder="Average"
+                >
+
+
+                <button
+                    type="button"
+                    class="leaderboard-delete"
+                >
+                    ✕
+                </button>
+
+            `;
+
+
+            row.querySelector(
+                ".leaderboard-delete"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    leaderboardData.splice(
+                        index,
+                        1
+                    );
+
+                    renderLeaderboardAdmin();
+
+                }
+            );
+
+
+            leaderboardAdminList.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   ADD STUDENT
+========================================= */
+
+addLeaderboardStudent.addEventListener(
+    "click",
+    () => {
+
+        leaderboardData.push({
+
+            name:
+                "New Student",
+
+            grade:
+                0
+
+        });
+
+
+        renderLeaderboardAdmin();
+
+
+        const rows =
+            leaderboardAdminList
+                .querySelectorAll(
+                    ".leaderboard-admin-row"
+                );
+
+
+        const lastRow =
+            rows[rows.length - 1];
+
+
+        lastRow
+            .querySelector(
+                ".leaderboard-name"
+            )
+            .focus();
+
+    }
+);
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+saveLeaderboard.addEventListener(
+    "click",
+    async () => {
+
+        const rows =
+            leaderboardAdminList
+                .querySelectorAll(
+                    ".leaderboard-admin-row"
+                );
+
+
+        const updated = [];
+
+
+        rows.forEach(
+            row => {
+
+                const name =
+                    row.querySelector(
+                        ".leaderboard-name"
+                    )
+                    .value
+                    .trim();
+
+
+                const grade =
+                    Number(
+                        row.querySelector(
+                            ".leaderboard-grade"
+                        )
+                        .value
+                    );
+
+
+                if (
+                    name &&
+                    Number.isFinite(
+                        grade
+                    ) &&
+                    grade >= 0 &&
+                    grade <= 20
+                ) {
+
+                    updated.push({
+
+                        name,
+                        grade
+
+                    });
+
+                }
+
+            }
+        );
+
+
+        saveLeaderboard.disabled =
+            true;
+
+        saveLeaderboard.textContent =
+            "SAVING...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/leaderboard",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                updated
+                            )
+
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "Save failed."
+                );
+
+            }
+
+
+            leaderboardData =
+                result.leaderboard;
+
+
+            renderLeaderboardAdmin();
+
+
+            if (
+                typeof showStatus ===
+                "function"
+            ) {
+
+                showStatus(
+                    "✓ LEADERBOARD SAVED",
+                    "success"
+                );
+
+            }
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            if (
+                typeof showStatus ===
+                "function"
+            ) {
+
+                showStatus(
+                    "❌ COULDN'T SAVE LEADERBOARD",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        saveLeaderboard.disabled =
+            false;
+
+        saveLeaderboard.textContent =
+            "🏆 SAVE RANKINGS";
+
+    }
+);
+/* =========================================
+   CTRL + S — SAVE LEADERBOARD
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase() === "s"
+        ) {
+
+            event.preventDefault();
+
+            saveLeaderboard.click();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   ESCAPE
+========================================= */
+
+function escapeLeaderboardText(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text ?? "";
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+loadLeaderboardAdmin();
+
+</script>
+
+<script>
+
+/* =========================================
+   NOTIFICATION MANAGER
+========================================= */
+
+const notificationForm =
+    document.getElementById(
+        "notificationForm"
+    );
+
+const notificationTitle =
+    document.getElementById(
+        "notificationTitle"
+    );
+
+const notificationMessage =
+    document.getElementById(
+        "notificationMessage"
+    );
+
+const notificationType =
+    document.getElementById(
+        "notificationType"
+    );
+
+const publishNotification =
+    document.getElementById(
+        "publishNotification"
+    );
+
+const notificationAdminList =
+    document.getElementById(
+        "notificationAdminList"
+    );
+
+const refreshNotifications =
+    document.getElementById(
+        "refreshNotifications"
+    );
+
+
+/* =========================================
+   LOAD
+========================================= */
+
+async function loadNotificationsAdmin() {
+
+    notificationAdminList.innerHTML = `
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ⟳
+            </div>
+
+            <div class="empty-title">
+                LOADING NOTIFICATIONS
+            </div>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/notifications"
+            );
+
+
+        const notifications =
+            await response.json();
+
+
+        if (
+            !notifications.length
+        ) {
+
+            notificationAdminList.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        🔔
+                    </div>
+
+                    <div class="empty-title">
+                        NO NOTIFICATIONS
+                    </div>
+
+                    <div class="empty-text">
+                        Publish your first class update.
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        notificationAdminList.innerHTML =
+            "";
+
+
+        notifications.forEach(
+            notification => {
+
+                createNotificationAdminCard(
+                    notification
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        notificationAdminList.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <div class="empty-title">
+                    COULDN'T LOAD NOTIFICATIONS
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE CARD
+========================================= */
+
+function createNotificationAdminCard(
+    notification
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "notification-admin-card";
+
+
+    card.innerHTML = `
+
+        <div class="notification-admin-type">
+            ${getNotificationIcon(
+                notification.type
+            )}
+            ${escapeNotificationText(
+                notification.type
+            ).toUpperCase()}
+        </div>
+
+
+        <div class="notification-admin-title">
+            ${escapeNotificationText(
+                notification.title
+            )}
+        </div>
+
+
+        <div class="notification-admin-message">
+            ${escapeNotificationText(
+                notification.message
+            )}
+        </div>
+
+
+        <div class="notification-admin-date">
+            ${formatNotificationDate(
+                notification.createdAt
+            )}
+        </div>
+
+
+        <button
+            class="notification-delete"
+            type="button"
+        >
+            DELETE
+        </button>
+
+    `;
+
+
+    const deleteButton =
+        card.querySelector(
+            ".notification-delete"
+        );
+
+
+    deleteButton.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !confirm(
+                    "Delete this notification?"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            deleteButton.disabled =
+                true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        "/api/notifications/" +
+                        encodeURIComponent(
+                            notification.id
+                        ),
+
+                        {
+                            method:
+                                "DELETE"
+                        }
+
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !result.success
+                ) {
+
+                    throw new Error(
+                        result.message ||
+                        "Delete failed."
+                    );
+
+                }
+
+
+                card.remove();
+
+
+                showStatus(
+                    "✓ NOTIFICATION DELETED",
+                    "success"
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                deleteButton.disabled =
+                    false;
+
+                showStatus(
+                    "❌ COULDN'T DELETE NOTIFICATION",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+    notificationAdminList.appendChild(
+        card
+    );
+
+}
+
+
+/* =========================================
+   PUBLISH
+========================================= */
+
+notificationForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        const title =
+            notificationTitle.value.trim();
+
+        const message =
+            notificationMessage.value.trim();
+
+        const type =
+            notificationType.value;
+
+
+        if (
+            !title ||
+            !message
+        ) {
+
+            showStatus(
+                "❌ FILL IN TITLE AND MESSAGE",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        publishNotification.disabled =
+            true;
+
+        publishNotification.textContent =
+            "PUBLISHING...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/notifications",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                title:
+                                    title,
+
+                                message:
+                                    message,
+
+                                type:
+                                    type
+
+                            })
+
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "Publish failed."
+                );
+
+            }
+
+
+            notificationForm.reset();
+
+
+            showStatus(
+                "✓ NOTIFICATION PUBLISHED",
+                "success"
+            );
+
+
+            loadNotificationsAdmin();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            showStatus(
+                "❌ COULDN'T PUBLISH NOTIFICATION",
+                "error"
+            );
+
+        }
+
+
+        publishNotification.disabled =
+            false;
+
+        publishNotification.textContent =
+            "🔔 PUBLISH NOTIFICATION";
+
+    }
+);
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function getNotificationIcon(
+    type
+) {
+
+    const icons = {
+
+        info:
+            "ℹ",
+
+        gallery:
+            "📸",
+
+        asset:
+            "📦",
+
+        leaderboard:
+            "🏆",
+
+        event:
+            "📅"
+
+    };
+
+
+    return (
+        icons[type] ||
+        "🔔"
+    );
+
+}
+
+
+function formatNotificationDate(date) {
+
+    const value = new Date(date);
+
+    if (Number.isNaN(value.getTime())) {
+        return "UNKNOWN DATE";
+    }
+
+    return value.toLocaleString("en-GB", {
+        timeZone: "Africa/Algiers",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    });
+
+}
+
+
+function escapeNotificationText(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text ?? "";
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   EVENTS
+========================================= */
+
+refreshNotifications.addEventListener(
+    "click",
+    loadNotificationsAdmin
+);
+
+
+loadNotificationsAdmin();
+
+</script>
+<script>
+
+/* =========================================
+   STUDENT OF THE WEEK ADMIN
+========================================= */
+
+const studentWeekForm =
+    document.getElementById(
+        "studentWeekForm"
+    );
+
+const studentWeekStudent =
+    document.getElementById(
+        "studentWeekStudent"
+    );
+
+const studentWeekTitle =
+    document.getElementById(
+        "studentWeekTitle"
+    );
+
+const studentWeekReason =
+    document.getElementById(
+        "studentWeekReason"
+    );
+
+const publishStudentWeek =
+    document.getElementById(
+        "publishStudentWeek"
+    );
+
+const studentWeekCurrent =
+    document.getElementById(
+        "studentWeekCurrent"
+    );
+
+
+/* =========================================
+   LOAD STUDENTS
+========================================= */
+
+async function loadStudentWeekStudents() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/leaderboard"
+            );
+
+
+        const students =
+            await response.json();
+
+
+        studentWeekStudent.innerHTML =
+            "";
+
+
+        students.forEach(
+            student => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    student.name;
+
+
+                option.textContent =
+                    student.name;
+
+
+                studentWeekStudent.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Couldn't load students:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   LOAD CURRENT
+========================================= */
+
+async function loadCurrentStudentWeek() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/student-of-week"
+            );
+
+
+        const current =
+            await response.json();
+
+
+        if (
+            !current.student
+        ) {
+
+            studentWeekCurrent.innerHTML = `
+                No Student of the Week published yet.
+            `;
+
+            return;
+
+        }
+
+
+        studentWeekCurrent.innerHTML = `
+
+            <strong>
+                CURRENT:
+            </strong>
+
+            ${escapeStudentWeekText(
+                current.student
+            )}
+
+            <br>
+
+            <strong>
+                TITLE:
+            </strong>
+
+            ${escapeStudentWeekText(
+                current.title
+            )}
+
+            <br>
+
+            <strong>
+                REASON:
+            </strong>
+
+            ${escapeStudentWeekText(
+                current.reason
+            )}
+
+        `;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================
+   PUBLISH
+========================================= */
+
+studentWeekForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        publishStudentWeek.disabled =
+            true;
+
+        publishStudentWeek.textContent =
+            "PUBLISHING...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/student-of-week",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                student:
+                                    studentWeekStudent.value,
+
+                                title:
+                                    studentWeekTitle.value,
+
+                                reason:
+                                    studentWeekReason.value
+
+                            })
+
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "Publish failed."
+                );
+
+            }
+
+
+            showStatus(
+                "✓ STUDENT OF THE WEEK PUBLISHED",
+                "success"
+            );
+
+
+            loadCurrentStudentWeek();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            showStatus(
+                "❌ " + error.message,
+                "error"
+            );
+
+        }
+
+
+        publishStudentWeek.disabled =
+            false;
+
+        publishStudentWeek.textContent =
+            "⭐ PUBLISH STUDENT OF THE WEEK";
+
+    }
+);
+
+
+/* =========================================
+   ESCAPE
+========================================= */
+
+function escapeStudentWeekText(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text ?? "";
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+loadStudentWeekStudents();
+
+loadCurrentStudentWeek();
+
+</script>
+
+<script>
+
+/* =========================================
+   SHOUTBOX ADMIN
+========================================= */
+
+const shoutboxAdminList =
+    document.getElementById(
+        "shoutboxAdminList"
+    );
+
+const refreshShoutboxAdmin =
+    document.getElementById(
+        "refreshShoutboxAdmin"
+    );
+
+
+/* =========================================
+   LOAD MESSAGES
+========================================= */
+
+async function loadShoutboxAdmin() {
+
+    shoutboxAdminList.innerHTML = `
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ⟳
+            </div>
+
+            <div class="empty-title">
+                LOADING MESSAGES
+            </div>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/shoutbox"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Couldn't load messages."
+            );
+
+        }
+
+
+        const messages =
+            await response.json();
+
+
+        if (!messages.length) {
+
+            shoutboxAdminList.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        💬
+                    </div>
+
+                    <div class="empty-title">
+                        NO MESSAGES
+                    </div>
+
+                    <div class="empty-text">
+                        The shoutbox is currently empty.
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+         * Newest first in the admin panel.
+         */
+
+        messages.reverse();
+
+
+        shoutboxAdminList.innerHTML = "";
+
+
+        messages.forEach(
+            message => {
+
+                createShoutboxAdminCard(
+                    message
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        shoutboxAdminList.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <div class="empty-title">
+                    COULDN'T LOAD MESSAGES
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE CARD
+========================================= */
+
+function createShoutboxAdminCard(
+    message
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "shoutbox-admin-card";
+
+
+    card.innerHTML = `
+
+        <div
+            class="shoutbox-admin-name"
+        >
+            ${escapeShoutboxAdminText(
+                message.name
+            )}
+        </div>
+
+
+        <div
+            class="shoutbox-admin-message"
+        >
+            ${escapeShoutboxAdminText(
+                message.message
+            )}
+        </div>
+
+
+        <div
+            class="shoutbox-admin-date"
+        >
+            ${formatShoutboxAdminDate(
+                message.createdAt
+            )}
+        </div>
+
+
+        <button
+            class="shoutbox-admin-delete"
+            type="button"
+        >
+            DELETE
+        </button>
+
+    `;
+
+
+    const deleteButton =
+        card.querySelector(
+            ".shoutbox-admin-delete"
+        );
+
+
+    deleteButton.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !confirm(
+                    "Delete this message?"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            deleteButton.disabled =
+                true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        "/api/shoutbox/" +
+                        encodeURIComponent(
+                            message.id
+                        ),
+
+                        {
+                            method:
+                                "DELETE"
+                        }
+
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !result.success
+                ) {
+
+                    throw new Error(
+                        result.message ||
+                        "Delete failed."
+                    );
+
+                }
+
+
+                card.remove();
+
+
+                showStatus(
+                    "✓ MESSAGE DELETED",
+                    "success"
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                deleteButton.disabled =
+                    false;
+
+                showStatus(
+                    "❌ COULDN'T DELETE MESSAGE",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+    shoutboxAdminList.appendChild(
+        card
+    );
+
+}
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function escapeShoutboxAdminText(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text ?? "";
+
+
+    return div.innerHTML;
+
+}
+
+
+function formatShoutboxAdminDate(
+    date
+) {
+
+    const value =
+        new Date(date);
+
+
+    if (
+        Number.isNaN(
+            value.getTime()
+        )
+    ) {
+
+        return "";
+
+    }
+
+
+    return value.toLocaleString(
+        "en-GB",
+        {
+            timeZone:
+                "Africa/Algiers",
+
+            day:
+                "2-digit",
+
+            month:
+                "2-digit",
+
+            year:
+                "numeric",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit",
+
+            hour12:
+                false
+        }
+    );
+
+}
+
+
+/* =========================================
+   REFRESH
+========================================= */
+
+refreshShoutboxAdmin.addEventListener(
+    "click",
+    loadShoutboxAdmin
+);
+
+
+/* =========================================
+   START
+========================================= */
+
+loadShoutboxAdmin();
+
+</script>
+
+<script>
+
+/* =========================================
+   ANNOUNCEMENT MANAGER
+========================================= */
+
+const announcementForm =
+    document.getElementById(
+        "announcementForm"
+    );
+
+const announcementTitle =
+    document.getElementById(
+        "announcementTitle"
+    );
+
+const announcementMessage =
+    document.getElementById(
+        "announcementMessage"
+    );
+
+const announcementType =
+    document.getElementById(
+        "announcementType"
+    );
+
+const announcementDueDate =
+    document.getElementById(
+        "announcementDueDate"
+    );
+
+const publishAnnouncement =
+    document.getElementById(
+        "publishAnnouncement"
+    );
+
+const announcementAdminList =
+    document.getElementById(
+        "announcementAdminList"
+    );
+
+const refreshAnnouncements =
+    document.getElementById(
+        "refreshAnnouncements"
+    );
+
+
+/* =========================================
+   LOAD
+========================================= */
+
+async function loadAnnouncementsAdmin() {
+
+    announcementAdminList.innerHTML = `
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ⟳
+            </div>
+
+            <div class="empty-title">
+                LOADING ANNOUNCEMENTS
+            </div>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/announcements"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Couldn't load announcements."
+            );
+
+        }
+
+
+        const announcements =
+            await response.json();
+
+
+        if (!announcements.length) {
+
+            announcementAdminList.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📅
+                    </div>
+
+                    <div class="empty-title">
+                        NO ANNOUNCEMENTS
+                    </div>
+
+                    <div class="empty-text">
+                        Publish your first class announcement.
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        announcementAdminList.innerHTML = "";
+
+
+        announcements.forEach(
+            announcement => {
+
+                createAnnouncementAdminCard(
+                    announcement
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        announcementAdminList.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <div class="empty-title">
+                    COULDN'T LOAD ANNOUNCEMENTS
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE CARD
+========================================= */
+
+function createAnnouncementAdminCard(
+    announcement
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "announcement-admin-card";
+
+
+    card.innerHTML = `
+
+        <div
+            class="announcement-admin-type"
+        >
+            ${getAnnouncementIcon(
+                announcement.type
+            )}
+            ${escapeAnnouncementText(
+                announcement.type
+            ).toUpperCase()}
+        </div>
+
+
+        <div
+            class="announcement-admin-title"
+        >
+            ${escapeAnnouncementText(
+                announcement.title
+            )}
+        </div>
+
+
+        <div
+            class="announcement-admin-message"
+        >
+            ${escapeAnnouncementText(
+                announcement.message
+            )}
+        </div>
+
+
+        ${
+            announcement.dueDate
+                ? `
+                    <div
+                        class="announcement-admin-date"
+                    >
+                        DATE:
+                        ${escapeAnnouncementText(
+                            formatAnnouncementDate(
+                                announcement.dueDate
+                            )
+                        )}
+                    </div>
+                `
+                : ""
+        }
+
+
+        <div
+            class="announcement-admin-date"
+        >
+            PUBLISHED:
+            ${formatAnnouncementDateTime(
+                announcement.createdAt
+            )}
+        </div>
+
+
+        <button
+            class="announcement-admin-delete"
+            type="button"
+        >
+            DELETE
+        </button>
+
+    `;
+
+
+    const deleteButton =
+        card.querySelector(
+            ".announcement-admin-delete"
+        );
+
+
+    deleteButton.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !confirm(
+                    "Delete this announcement?"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            deleteButton.disabled =
+                true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        "/api/announcements/" +
+                        encodeURIComponent(
+                            announcement.id
+                        ),
+
+                        {
+                            method:
+                                "DELETE"
+                        }
+
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !result.success
+                ) {
+
+                    throw new Error(
+                        result.message ||
+                        "Delete failed."
+                    );
+
+                }
+
+
+                card.remove();
+
+
+                showStatus(
+                    "✓ ANNOUNCEMENT DELETED",
+                    "success"
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                deleteButton.disabled =
+                    false;
+
+                showStatus(
+                    "❌ COULDN'T DELETE ANNOUNCEMENT",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+    announcementAdminList.appendChild(
+        card
+    );
+
+}
+
+
+/* =========================================
+   PUBLISH
+========================================= */
+
+announcementForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        const title =
+            announcementTitle.value.trim();
+
+        const message =
+            announcementMessage.value.trim();
+
+        const type =
+            announcementType.value;
+
+        const dueDate =
+            announcementDueDate.value;
+
+
+        if (
+            !title ||
+            !message
+        ) {
+
+            showStatus(
+                "❌ FILL IN TITLE AND MESSAGE",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        publishAnnouncement.disabled =
+            true;
+
+        publishAnnouncement.textContent =
+            "PUBLISHING...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/announcements",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                title:
+                                    title,
+
+                                message:
+                                    message,
+
+                                type:
+                                    type,
+
+                                dueDate:
+                                    dueDate
+
+                            })
+
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "Publish failed."
+                );
+
+            }
+
+
+            announcementForm.reset();
+
+
+            showStatus(
+                "✓ ANNOUNCEMENT PUBLISHED",
+                "success"
+            );
+
+
+            loadAnnouncementsAdmin();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            showStatus(
+                "❌ COULDN'T PUBLISH ANNOUNCEMENT",
+                "error"
+            );
+
+        }
+
+
+        publishAnnouncement.disabled =
+            false;
+
+        publishAnnouncement.textContent =
+            "📢 PUBLISH ANNOUNCEMENT";
+
+    }
+);
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function getAnnouncementIcon(
+    type
+) {
+
+    const icons = {
+
+        homework:
+            "📚",
+
+        important:
+            "⚠",
+
+        event:
+            "📅",
+
+        general:
+            "ℹ"
+
+    };
+
+
+    return (
+        icons[type] ||
+        "📢"
+    );
+
+}
+
+
+function formatAnnouncementDate(
+    value
+) {
+
+    if (!value) {
+
+        return "";
+
+    }
+
+
+    /*
+     * Date inputs represent a calendar date,
+     * so don't shift it to another timezone.
+     */
+
+    const parts =
+        String(value).split("-");
+
+
+    if (
+        parts.length !== 3
+    ) {
+
+        return value;
+
+    }
+
+
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+}
+
+
+function formatAnnouncementDateTime(
+    value
+) {
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "";
+
+    }
+
+
+    return date.toLocaleString(
+        "en-GB",
+        {
+            timeZone:
+                "Africa/Algiers",
+
+            day:
+                "2-digit",
+
+            month:
+                "2-digit",
+
+            year:
+                "numeric",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit",
+
+            hour12:
+                false
+        }
+    );
+
+}
+
+
+function escapeAnnouncementText(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text ?? "";
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   EVENTS
+========================================= */
+
+refreshAnnouncements.addEventListener(
+    "click",
+    loadAnnouncementsAdmin
+);
+
+
+/* =========================================
+   START
+========================================= */
+
+loadAnnouncementsAdmin();
+
+</script>
+
+<script>
+
+/* =========================================
+   STUDENT ACHIEVEMENTS ADMIN
+========================================= */
+
+const studentAchievementForm =
+    document.getElementById(
+        "studentAchievementForm"
+    );
+
+
+const achievementStudent =
+    document.getElementById(
+        "achievementStudent"
+    );
+
+
+const achievementIcon =
+    document.getElementById(
+        "achievementIcon"
+    );
+
+
+const achievementTitle =
+    document.getElementById(
+        "achievementTitle"
+    );
+
+
+const achievementDate =
+    document.getElementById(
+        "achievementDate"
+    );
+
+
+const achievementDescription =
+    document.getElementById(
+        "achievementDescription"
+    );
+
+
+const addStudentAchievement =
+    document.getElementById(
+        "addStudentAchievement"
+    );
+
+
+const refreshStudentAchievements =
+    document.getElementById(
+        "refreshStudentAchievements"
+    );
+
+
+const studentAchievementsAdminList =
+    document.getElementById(
+        "studentAchievementsAdminList"
+    );
+
+
+/* =========================================
+   LOAD STUDENTS
+========================================= */
+
+async function loadAchievementStudents() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/leaderboard"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Couldn't load students."
+            );
+
+        }
+
+
+        const students =
+            await response.json();
+
+
+        achievementStudent.innerHTML =
+            "";
+
+
+        students.forEach(
+            student => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    student.name;
+
+
+                option.textContent =
+                    student.name;
+
+
+                achievementStudent.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Achievement student load error:",
+            error
+        );
+
+
+        achievementStudent.innerHTML = `
+
+            <option value="">
+                COULDN'T LOAD STUDENTS
+            </option>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   LOAD ACHIEVEMENTS
+========================================= */
+
+async function loadStudentAchievementsAdmin() {
+
+    studentAchievementsAdminList.innerHTML = `
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ⟳
+            </div>
+
+            <div class="empty-title">
+                LOADING ACHIEVEMENTS
+            </div>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/student-achievements"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Couldn't load achievements."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        studentAchievementsAdminList.innerHTML =
+            "";
+
+
+        const allAchievements = [];
+
+
+        Object.keys(data).forEach(
+            studentKey => {
+
+                const list =
+                    Array.isArray(
+                        data[studentKey]
+                    )
+                        ? data[studentKey]
+                        : [];
+
+
+                list.forEach(
+                    achievement => {
+
+                        allAchievements.push(
+                            achievement
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        if (
+            allAchievements.length === 0
+        ) {
+
+            studentAchievementsAdminList.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        🏆
+                    </div>
+
+                    <div class="empty-title">
+                        NO STUDENT ACHIEVEMENTS
+                    </div>
+
+                    <div class="empty-text">
+                        Add the first achievement above.
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        allAchievements.sort(
+            (a, b) =>
+                new Date(
+                    b.createdAt || 0
+                ) -
+                new Date(
+                    a.createdAt || 0
+                )
+        );
+
+
+        allAchievements.forEach(
+            createStudentAchievementAdminCard
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        studentAchievementsAdminList.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <div class="empty-title">
+                    COULDN'T LOAD ACHIEVEMENTS
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE ADMIN CARD
+========================================= */
+
+function createStudentAchievementAdminCard(
+    achievement
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "student-achievement-admin-card";
+
+
+    card.innerHTML = `
+
+        <div
+            class="student-achievement-admin-icon"
+        >
+            ${escapeStudentAchievementText(
+                achievement.icon ||
+                "🏆"
+            )}
+        </div>
+
+
+        <div
+            class="student-achievement-admin-student"
+        >
+            ${escapeStudentAchievementText(
+                achievement.student
+            )}
+        </div>
+
+
+        <div
+            class="student-achievement-admin-title"
+        >
+            ${escapeStudentAchievementText(
+                achievement.title
+            )}
+        </div>
+
+
+        <div
+            class="student-achievement-admin-description"
+        >
+            ${escapeStudentAchievementText(
+                achievement.description
+            )}
+        </div>
+
+
+        <div
+            class="student-achievement-admin-meta"
+        >
+            ${achievement.date
+                ? escapeStudentAchievementText(
+                    achievement.date
+                ) + " • "
+                : ""
+            }
+            ADDED
+            ${formatStudentAchievementDate(
+                achievement.createdAt
+            )}
+        </div>
+
+
+        <button
+            type="button"
+            class="student-achievement-admin-delete"
+        >
+            DELETE
+        </button>
+
+    `;
+
+
+    const deleteButton =
+        card.querySelector(
+            ".student-achievement-admin-delete"
+        );
+
+
+    deleteButton.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !confirm(
+                    `Delete "${achievement.title}" from ${achievement.student}?`
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            deleteButton.disabled =
+                true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        "/api/student-achievements/" +
+                        encodeURIComponent(
+                            achievement.student
+                        ) +
+                        "/" +
+                        encodeURIComponent(
+                            achievement.id
+                        ),
+
+                        {
+                            method:
+                                "DELETE"
+                        }
+
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !result.success
+                ) {
+
+                    throw new Error(
+                        result.message ||
+                        "Delete failed."
+                    );
+
+                }
+
+
+                card.remove();
+
+
+                showStatus(
+                    "✓ ACHIEVEMENT DELETED",
+                    "success"
+                );
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                deleteButton.disabled =
+                    false;
+
+
+                showStatus(
+                    "❌ COULDN'T DELETE ACHIEVEMENT",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+    studentAchievementsAdminList.appendChild(
+        card
+    );
+
+}
+
+
+/* =========================================
+   ADD ACHIEVEMENT
+========================================= */
+
+studentAchievementForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        const student =
+            achievementStudent.value.trim();
+
+
+        const icon =
+            achievementIcon.value.trim() ||
+            "🏆";
+
+
+        const title =
+            achievementTitle.value.trim();
+
+
+        const date =
+            achievementDate.value.trim();
+
+
+        const description =
+            achievementDescription.value.trim();
+
+
+        if (
+            !student ||
+            !title ||
+            !description
+        ) {
+
+            showStatus(
+                "❌ FILL IN THE REQUIRED FIELDS",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        addStudentAchievement.disabled =
+            true;
+
+
+        addStudentAchievement.textContent =
+            "ADDING...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/student-achievements",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                student:
+                                    student,
+
+                                icon:
+                                    icon,
+
+                                title:
+                                    title,
+
+                                date:
+                                    date,
+
+                                description:
+                                    description
+
+                            })
+
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "Couldn't add achievement."
+                );
+
+            }
+
+
+            achievementTitle.value =
+                "";
+
+            achievementDate.value =
+                "";
+
+            achievementDescription.value =
+                "";
+
+
+            achievementIcon.value =
+                "🏆";
+
+
+            showStatus(
+                "✓ ACHIEVEMENT ADDED",
+                "success"
+            );
+
+
+            loadStudentAchievementsAdmin();
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            showStatus(
+                "❌ " +
+                error.message,
+                "error"
+            );
+
+        }
+
+
+        addStudentAchievement.disabled =
+            false;
+
+
+        addStudentAchievement.textContent =
+            "🏆 ADD ACHIEVEMENT";
+
+    }
+);
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function escapeStudentAchievementText(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text ?? "";
+
+
+    return div.innerHTML;
+
+}
+
+
+function formatStudentAchievementDate(
+    date
+) {
+
+    const value =
+        new Date(date);
+
+
+    if (
+        Number.isNaN(
+            value.getTime()
+        )
+    ) {
+
+        return "";
+
+    }
+
+
+    return value.toLocaleDateString(
+        "en-GB",
+        {
+            timeZone:
+                "Africa/Algiers"
+        }
+    );
+
+}
+
+
+/* =========================================
+   REFRESH
+========================================= */
+
+refreshStudentAchievements.addEventListener(
+    "click",
+    loadStudentAchievementsAdmin
+);
+
+
+/* =========================================
+   START
+========================================= */
+
+loadAchievementStudents();
+
+loadStudentAchievementsAdmin();
+
+</script>
+
+<script>
+
+/* =====================================================
+   4MS3 ADMIN SECURITY MANAGER
+===================================================== */
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const adminLoginOverlay =
+    document.getElementById(
+        "adminLoginOverlay"
+    );
+
+
+const adminPasswordInput =
+    document.getElementById(
+        "adminPasswordInput"
+    );
+
+
+const adminLoginButton =
+    document.getElementById(
+        "adminLoginButton"
+    );
+
+
+const adminLoginError =
+    document.getElementById(
+        "adminLoginError"
+    );
+
+
+const studentSecurityList =
+    document.getElementById(
+        "studentSecurityList"
+    );
+
+
+const refreshStudentSecurity =
+    document.getElementById(
+        "refreshStudentSecurity"
+    );
+
+
+/* =========================================
+   PIN RESULT
+========================================= */
+
+const securityPinResult =
+    document.createElement(
+        "div"
+    );
+
+
+securityPinResult.className =
+    "security-pin-result";
+
+
+securityPinResult.innerHTML = `
+
+    <div class="security-pin-result-title">
+        NEW STUDENT PIN
+    </div>
+
+    <div
+        class="security-pin-result-name"
+        id="securityPinResultName"
+    ></div>
+
+    <div
+        class="security-pin-value"
+        id="securityPinValue"
+    ></div>
+
+    <div class="security-pin-note">
+        Give this PIN privately to the student.
+        It will not be shown again after this window is closed.
+    </div>
+
+`;
+
+
+document.body.appendChild(
+    securityPinResult
+);
+
+
+const securityPinResultName =
+    document.getElementById(
+        "securityPinResultName"
+    );
+
+
+const securityPinValue =
+    document.getElementById(
+        "securityPinValue"
+    );
+
+
+/* =========================================
+   ADMIN SESSION
+========================================= */
+
+async function checkAdminSession() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/session",
+                {
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        if (
+            response.ok
+        ) {
+
+            adminLoginOverlay.classList.add(
+                "hidden"
+            );
+
+
+            loadStudentSecurity();
+
+            return;
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Admin session check error:",
+            error
+        );
+
+    }
+
+
+    adminLoginOverlay.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================
+   ADMIN LOGIN
+========================================= */
+
+async function loginAdmin() {
+
+    const password =
+        adminPasswordInput.value.trim();
+
+
+    adminLoginError.textContent =
+        "";
+
+
+    if (!password) {
+
+        adminLoginError.textContent =
+            "⚠ ENTER THE ADMIN PASSWORD.";
+
+        adminPasswordInput.focus();
+
+        return;
+
+    }
+
+
+    adminLoginButton.disabled =
+        true;
+
+    adminLoginButton.textContent =
+        "🔐 VERIFYING...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/login",
+                {
+
+                    method:
+                        "POST",
+
+                    credentials:
+                        "same-origin",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            password:
+                                password
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Incorrect admin password."
+            );
+
+        }
+
+
+        adminPasswordInput.value =
+            "";
+
+
+        adminLoginOverlay.classList.add(
+            "hidden"
+        );
+
+
+        loadStudentSecurity();
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Admin login error:",
+            error
+        );
+
+
+        adminLoginError.textContent =
+            "⚠ " +
+            error.message;
+
+    }
+
+
+    adminLoginButton.disabled =
+        false;
+
+    adminLoginButton.textContent =
+        "🔐 ENTER ADMIN";
+
+}
+
+
+/* =========================================
+   LOAD STUDENT SECURITY
+========================================= */
+
+async function loadStudentSecurity() {
+
+    studentSecurityList.innerHTML = `
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ⟳
+            </div>
+
+            <div class="empty-title">
+                LOADING SECURITY
+            </div>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/access",
+                {
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        if (
+            response.status === 401
+        ) {
+
+            adminLoginOverlay.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Couldn't load student security."
+            );
+
+        }
+
+
+        studentSecurityList.innerHTML =
+            "";
+
+
+        if (
+            !result.students.length
+        ) {
+
+            studentSecurityList.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        👥
+                    </div>
+
+                    <div class="empty-title">
+                        NO STUDENTS
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        result.students.forEach(
+            student => {
+
+                createStudentSecurityCard(
+                    student
+                );
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Student security load error:",
+            error
+        );
+
+
+        studentSecurityList.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠
+                </div>
+
+                <div class="empty-title">
+                    COULDN'T LOAD SECURITY
+                </div>
+
+                <div class="empty-text">
+                    ${escapeSecurityText(
+                        error.message
+                    )}
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE SECURITY CARD
+========================================= */
+
+function createStudentSecurityCard(
+    student
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "student-security-card";
+
+
+    const pinBadge =
+        student.hasPin
+
+            ? `
+                <span
+                    class="security-badge pin"
+                >
+                    ✓ PIN ACTIVE
+                </span>
+              `
+
+            : `
+                <span
+                    class="security-badge no-pin"
+                >
+                    ⚠ NO PIN
+                </span>
+              `;
+
+
+    const banBadge =
+        student.banned
+
+            ? `
+                <span
+                    class="security-badge banned"
+                >
+                    🚫 BANNED
+                </span>
+              `
+
+            : "";
+
+
+    const banReason =
+        student.banned &&
+        student.banReason
+
+            ? `
+                <div class="student-security-reason">
+                    REASON:
+                    ${escapeSecurityText(
+                        student.banReason
+                    )}
+                </div>
+              `
+
+            : "";
+
+
+    card.innerHTML = `
+
+        <div>
+
+            <div
+                class="student-security-name"
+            >
+                ${escapeSecurityText(
+                    student.name
+                )}
+            </div>
+
+
+            <div
+                class="student-security-status"
+            >
+
+                ${pinBadge}
+
+                ${banBadge}
+
+            </div>
+
+
+            ${banReason}
+
+        </div>
+
+
+        <div
+            class="student-security-actions"
+        >
+
+            <button
+                type="button"
+                class="security-action-button"
+                data-action="pin"
+            >
+                🔑 ${
+                    student.hasPin
+                        ? "RESET PIN"
+                        : "GENERATE PIN"
+                }
+            </button>
+
+
+            ${
+                student.banned
+
+                    ? `
+
+                        <button
+                            type="button"
+                            class="security-action-button unban"
+                            data-action="unban"
+                        >
+                            ✓ UNBAN
+                        </button>
+
+                      `
+
+                    : `
+
+                        <button
+                            type="button"
+                            class="security-action-button ban"
+                            data-action="ban"
+                        >
+                            🚫 BAN
+                        </button>
+
+                      `
+            }
+
+        </div>
+
+    `;
+
+
+    const pinButton =
+        card.querySelector(
+            '[data-action="pin"]'
+        );
+
+
+    const banButton =
+        card.querySelector(
+            '[data-action="ban"]'
+        );
+
+
+    const unbanButton =
+        card.querySelector(
+            '[data-action="unban"]'
+        );
+
+
+    pinButton.addEventListener(
+        "click",
+        () => {
+
+            generateStudentPin(
+                student.name,
+                pinButton
+            );
+
+        }
+    );
+
+
+    if (banButton) {
+
+        banButton.addEventListener(
+            "click",
+            () => {
+
+                banStudent(
+                    student.name,
+                    banButton
+                );
+
+            }
+        );
+
+    }
+
+
+    if (unbanButton) {
+
+        unbanButton.addEventListener(
+            "click",
+            () => {
+
+                unbanStudent(
+                    student.name,
+                    unbanButton
+                );
+
+            }
+        );
+
+    }
+
+
+    studentSecurityList.appendChild(
+        card
+    );
+
+}
+
+
+/* =========================================
+   GENERATE PIN
+========================================= */
+
+async function generateStudentPin(
+    name,
+    button
+) {
+
+    const confirmed =
+        confirm(
+            `Generate a new private PIN for ${name}?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "GENERATING...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/student-pin",
+                {
+
+                    method:
+                        "POST",
+
+                    credentials:
+                        "same-origin",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            name:
+                                name
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            response.status === 401
+        ) {
+
+            adminLoginOverlay.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Couldn't create PIN."
+            );
+
+        }
+
+
+        securityPinResultName.textContent =
+            result.name;
+
+
+        securityPinValue.textContent =
+            result.pin;
+
+
+        securityPinResult.classList.add(
+            "show"
+        );
+
+
+        showStatus(
+            "✓ PIN GENERATED",
+            "success"
+        );
+
+
+        loadStudentSecurity();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Generate PIN error:",
+            error
+        );
+
+
+        showStatus(
+            "❌ " +
+            error.message,
+            "error"
+        );
+
+    }
+
+
+    button.disabled =
+        false;
+
+    button.textContent =
+        "🔑 RESET PIN";
+
+}
+
+
+/* =========================================
+   BAN
+========================================= */
+
+async function banStudent(
+    name,
+    button
+) {
+
+    const reason =
+        prompt(
+            `Why are you banning ${name}?`
+        );
+
+
+    if (
+        reason === null
+    ) {
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/ban",
+                {
+
+                    method:
+                        "POST",
+
+                    credentials:
+                        "same-origin",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            name:
+                                name,
+
+                            reason:
+                                reason.trim()
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            response.status === 401
+        ) {
+
+            adminLoginOverlay.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Couldn't ban student."
+            );
+
+        }
+
+
+        showStatus(
+            "✓ STUDENT BANNED",
+            "success"
+        );
+
+
+        loadStudentSecurity();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Ban error:",
+            error
+        );
+
+
+        showStatus(
+            "❌ " +
+            error.message,
+            "error"
+        );
+
+    }
+
+
+    button.disabled =
+        false;
+
+}
+
+
+/* =========================================
+   UNBAN
+========================================= */
+
+async function unbanStudent(
+    name,
+    button
+) {
+
+    if (
+        !confirm(
+            `Unban ${name}?`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/unban",
+                {
+
+                    method:
+                        "POST",
+
+                    credentials:
+                        "same-origin",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            name:
+                                name
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            response.status === 401
+        ) {
+
+            adminLoginOverlay.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Couldn't unban student."
+            );
+
+        }
+
+
+        showStatus(
+            "✓ STUDENT UNBANNED",
+            "success"
+        );
+
+
+        loadStudentSecurity();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unban error:",
+            error
+        );
+
+
+        showStatus(
+            "❌ " +
+            error.message,
+            "error"
+        );
+
+    }
+
+
+    button.disabled =
+        false;
+
+}
+
+
+/* =========================================
+   ESCAPE
+========================================= */
+
+function escapeSecurityText(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text ?? "";
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   EVENTS
+========================================= */
+
+adminLoginButton.addEventListener(
+    "click",
+    loginAdmin
+);
+
+
+adminPasswordInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            loginAdmin();
+
+        }
+
+    }
+);
+
+
+refreshStudentSecurity.addEventListener(
+    "click",
+    loadStudentSecurity
+);
+
+
+/* =========================================
+   START
+========================================= */
+
+checkAdminSession();
+
+</script>
+
+</body>
+
+</html>
